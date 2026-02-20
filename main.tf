@@ -42,7 +42,7 @@ resource "aws_security_group" "ssh_my_ip" {
 
 resource "aws_key_pair" "lab" {
   key_name   = "tf-lab-key"
-  public_key = file("/Users/nicholascoleman/.ssh/id_ed25519.pub")
+ public_key = file("${path.module}/id_ed25519.pub")
 }
 
 resource "aws_instance" "test" {
