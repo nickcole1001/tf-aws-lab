@@ -27,7 +27,12 @@ jobs:
 
       - name: Terraform Init
         run: terraform init
-
+        
+      - name: Debug checkout SHA and key line
+        run: |
+          echo "Checked out SHA: $(git rev-parse HEAD)"
+          grep -n "public_key" -n main.tf
+          ls -la id_ed25519.pub || true
       - name: Terraform Plan
         run: terraform plan
 
