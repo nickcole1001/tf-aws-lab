@@ -2,6 +2,11 @@ name: Terraform
 
 on:
   workflow_dispatch:
+    inputs:
+      action:
+        description: "Choose: plan | apply | destroy"
+        required: true
+        default: "plan"
   pull_request:
   push:
     branches: [ "main" ]
@@ -41,6 +46,14 @@ jobs:
       - name: Terraform Plan
         run: terraform plan
 
+      - name: Terraform Plan
+        if: github.event_name != 'workflow_dispatch' || github.event.inputs.action == 'plan'
+        run: terraform plan
+
+      - name: Terraform Apply
+        if: github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'apply'
+        run: terraform apply -auto-approve
+
       - name: Terraform Destroy
-        if: github.ref == 'refs/heads/main'
+        if: github.event_name == 'workflow_dispatch' && github.event.inputs.action == 'destroy'
         run: terraform destroy -auto-approve
